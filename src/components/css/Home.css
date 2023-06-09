@@ -1,0 +1,137 @@
+body {
+  animation: changeColor 5s infinite;
+  /* Animazione per cambiare il colore */
+  color: #fff;
+  /* Colore del testo bianco */
+  margin: 0;
+  /* Rimuove il margine predefinito */
+  font-family: Arial, sans-serif;
+  /* Famiglia di caratteri del testo */
+
+}
+
+/* Animazione per cambiare il colore del body */
+@keyframes changeColor {
+  0% {
+    background-color: #5557e5;
+  }
+
+  /* Colore di sfondo blu scuro */
+  50% {
+    background-color: #6b16ba;
+  }
+
+  /* Colore di sfondo nero */
+  100% {
+    background-color: #5557e5;
+  }
+
+  /* Colore di sfondo blu scuro */
+}
+
+/* Stile per la navbar */
+.navbar {
+  background-color: rgb(255, 255, 255);
+  /* Colore di sfondo arancione */
+  padding: 10px;
+  /* Spazio interno */
+  border-style: solid;
+  text-align: center;
+  border-radius: 0px 0px 20px 20px;
+  /* Bordo stondato */
+  border-width: 10px;
+  border-color: rgb(255, 77, 0);
+  animation: slideIn 1s ease;
+  /* Animazione per l'entrata */
+}
+
+/* Animazione per l'entrata della navbar */
+@keyframes slideIn {
+  0% {
+    opacity: 0;
+    transform: translateY(-100%);
+  }
+
+  /* Partenza dall'alto */
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Entrata verso il basso */
+}
+
+/* Stile per l'immagine nella navbar */
+.navbar img {
+  width: 50px;
+  /* Dimensione immagine */
+  height: 50px;
+  margin-right: 10px;
+  /* Margine a destra dell'immagine */
+  border-radius: 0px 0px 50px 50px;
+}
+
+/* Stile per i bottoni nella navbar */
+button {
+  background-color: rgb(254, 152, 0);
+  /* Colore di sfondo arancione */
+  color: #ffffff;
+  /* Colore del testo bianco */
+  border: none;
+  /* Nessun bordo */
+  border-radius: 20px;
+  /* Bordo stondato */
+  padding: 8px 16px;
+  /* Spazio interno */
+  margin-right: 10px;
+  /* Margine a destra tra i bottoni */
+  cursor: pointer;
+  /* Mostra il cursore come puntatore */
+  height: 40px;
+  width: 200px;
+
+}
+
+/* Stile per il footer */
+footer {
+  background-color: #333;
+  /* Colore di sfondo grigio scuro */
+  color: #fff;
+  /* Colore del testo bianco */
+  padding: 20px;
+  /* Spazio interno */
+  text-align: center;
+  /* Allinea il testo al centro */
+  border-radius: 20px 20px 0px 0px;
+  /* Bordo stondato */
+  animation: slideIn 1s ease;
+  /* Animazione per l'entrata */
+  position: absolute;
+  bottom: 0px;
+  left: 0px;
+  right: 0px;
+}
+
+/* Stile per l'immagine nel footer */
+footer img {
+  width: 70px;
+  /* Dimensione immagine */
+  height: 70px;
+  margin-bottom: 10px;
+  /* Margine inferiore dell'immagine */
+  border-radius: 50px;
+}
+
+canvas {
+  display: block;
+  margin: auto;
+}
+
+#primo {
+  color: #333;
+  font-size: 100px;
+
+
+
+
+}

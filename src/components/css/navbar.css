@@ -1,0 +1,72 @@
+/* Stili per la navbar */
+.navbar {
+    background-color: #2d67b3;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .container-fluid{
+    margin-left: 3%;
+  }
+
+  .navbar-brand {
+    font-size: 18px;
+    font-weight: bold;
+    text-decoration: none;
+    color: #333;
+    /*width:20%;*/
+  }
+  
+  .navbar-toggler {
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+  }
+  
+  .navbar-toggler-icon {
+    width: 20px;
+    height: 20px;
+    background-color: #333;
+  }
+  
+  .navbar-collapse {
+    display: flex;
+    justify-content: flex-end;
+  }
+  
+  .navbar-nav {
+    list-style: none;
+    display: flex;
+    align-items: center;
+    width:50%;
+  }
+
+  .primolink{
+    margin-left:5px;
+  }
+  
+  .nav-item {
+    margin-right: 10px;
+  }
+  
+  .nav-link {
+    text-decoration: none;
+    color: #333;
+    font-weight: bold;
+  }
+  
+  .nav-link:hover {
+    color: #555;
+  }
+  
+  /*.nav-link.active {
+    color: #000;
+  } */
+  
+  .link {
+    cursor: pointer;
+    margin-left:10px;
+  }
+  

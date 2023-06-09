@@ -1,0 +1,39 @@
+.header_input_field {
+    width: 40%;
+    height: 10%;
+    margin-left: 2%;
+    margin-top: 2%;
+}
+
+
+.input_field {
+    width: 20%;
+    height: 10%;
+    margin-top: 2%;
+    margin-left: 5%;
+}
+
+.div {
+    width: 50%;
+    margin-top: 0px;
+    float: left;
+    display: block;
+}
+
+table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+td,
+th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+}
+
+tr:nth-child(even) {
+    background-color: #dddddd;
+    color: black;
+}
