@@ -5,7 +5,6 @@ import './css/Gamex.css';
 
 const initialState = { stato: "hidden" };
 const { useGlobalState } = createGlobalState(initialState);
-let moves = 0;
 
 function Square({ value, onSquareClick }) {
   return (
@@ -51,13 +50,14 @@ async function invioRisultato(risultato) {
 function Board({ xIsNext, squares, onPlay }) {
   const [status, setStatus] = useState("Prossimo giocatore: " + (xIsNext ? "X" : "O"));
   const [stato, setState] = useGlobalState("stato");
+  const [moves, setMoves] = useState(0);
 
   function handleClick(i) {
     if (squares[i]) {
       return;
     }
 
-    moves = moves + 1;
+    setMoves(moves + 1);
 
     const nextSquares = squares.slice();
     if (xIsNext) {
@@ -67,7 +67,7 @@ function Board({ xIsNext, squares, onPlay }) {
     }
     onPlay(nextSquares);
 
-    if (calculateWinner(nextSquares) || moves == 9) {
+    if (calculateWinner(nextSquares) || moves == 8) {
       const winner = calculateWinner(nextSquares);
       if (winner) {
         setState("visible");
@@ -77,15 +77,17 @@ function Board({ xIsNext, squares, onPlay }) {
         } else {
           invioRisultato({ result: "win" });
         }
-      } else if (moves == 9) {
+      } else if (moves == 8) {
+        setState("visible");
         invioRisultato({ result: "tie" });
         setStatus("Pareggio");
       }
-      moves = 0;
+      setMoves(0);
+
       return;
     }
 
-    setStatus("Prossimo giocatore: " + (xIsNext ? "X" : "O"));
+    setStatus("Prossimo giocatore: " + (xIsNext ? "O" : "X"));
 
   }
 
@@ -147,7 +149,7 @@ export default function Gamex() {
     <>
       <Board xIsNext={xIsNext} squares={currentSquares} onPlay={handlePlay} />
       <div style={{ textAlign: "center", width: "auto" }}>
-        <Link onClick={() => {setState("hidden");}} to="/user">
+        <Link onClick={() => { setState("hidden"); }} to="/user">
           <button>Indietro</button>
         </Link>
         <br />
