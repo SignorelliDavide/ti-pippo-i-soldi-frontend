@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import "./css/login.css";
 
@@ -32,6 +32,21 @@ function Login() {
       document.getElementById("loginErrato").style.visibility = "visible";
     }
   }
+
+  const [loggedIn, setLoggedIn] = useState();
+
+  useEffect(() => {
+    fetch("/api/auth/isLoggedIn", { credentials: "include" })
+      .then((res) => setLoggedIn(res.status === 200))
+  }, [])
+
+  if (loggedIn === true) {
+    navigate("/user");
+  }
+
+
+
+
   return (
     <div className="gradient-border" id="box">
       <div className="container">
