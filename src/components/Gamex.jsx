@@ -9,20 +9,7 @@ const { useGlobalState } = createGlobalState(initialState);
 function Square({ value, onSquareClick }) {
   return (
     <button
-      style={{
-        backgroundColor: "white",
-        color: "black",
-        fontSize: "40px",
-        borderRadius: "100px",
-        height: "100px",
-        width: "100px",
-        padding: "20px",
-        margin: 0,
-        borderColor: "red",
-        borderWidth: "10px",
-        position: "relative",
-      }}
-      className="square"
+      className="square cells"
       onClick={onSquareClick}
     >
       {value}
