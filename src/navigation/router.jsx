@@ -3,7 +3,7 @@ import { createBrowserRouter, Navigate } from "react-router-dom";
 import Login from "../components/login.jsx";
 import SignUp from "../components/SignUp.jsx";
 import Home from "../components/Home.jsx";
-import Game from "../components/Game.jsx";
+import Selection from "../components/Selection.jsx";
 import Gamex from "../components/Gamex.jsx";
 import Info from "../components/Info.jsx";
 import User from "../components/User.jsx";
@@ -12,8 +12,8 @@ function RequireAuth({ children }) {
   const [loggedIn, setLoggedIn] = useState();
 
   useEffect(() => {
-    fetch("/api/auth/isLoggedIn", {credentials: "include"})
-    .then((res) => setLoggedIn(res.status === 200))
+    fetch("/api/auth/isLoggedIn", { credentials: "include" })
+      .then((res) => setLoggedIn(res.status === 200))
   }, [])
 
   if (loggedIn === undefined) {
@@ -40,10 +40,10 @@ const router = createBrowserRouter([
     element: <Info />,
   },
   {
-    path: "game",
+    path: "selection",
     element: (
       <RequireAuth>
-        <Game />
+        <Selection />
       </RequireAuth>
     ),
   },
