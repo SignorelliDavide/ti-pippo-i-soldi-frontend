@@ -5,10 +5,10 @@ function Selection() {
     return (
         <div id="c1">
             <h1 id="c2">The Tris Game</h1>
-            <Link to="/gamex">
+            <Link to="/">
                 <button className="play-button">ONline</button>
             </Link>
-            <Link to="/gamex">
+            <Link to="/offline">
                 <button className="play-button">OFFline</button>
             </Link>
         </div>

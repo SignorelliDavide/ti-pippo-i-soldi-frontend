@@ -5,6 +5,7 @@ import SignUp from "../components/SignUp.jsx";
 import Home from "../components/Home.jsx";
 import Selection from "../components/Selection.jsx";
 import Gamex from "../components/Gamex.jsx";
+import Offline from "../components/Offline.jsx";
 import Info from "../components/Info.jsx";
 import User from "../components/User.jsx";
 
@@ -62,6 +63,10 @@ const router = createBrowserRouter([
         <User />
       </RequireAuth>
     ),
+  },
+  {
+    path: "offline",
+    element: <Offline />,
   },
 ]);
 export default router;
