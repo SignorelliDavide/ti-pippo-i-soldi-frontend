@@ -96,7 +96,7 @@ function Board({ xIsNext, squares, onPlay }) {
   );
 }
 
-export default function Gamex() {
+export default function Online() {
   const [history, setHistory] = useState([Array(9).fill(null)]);
   const [stato, setState] = useGlobalState("stato");
   const [currentMove, setCurrentMove] = useState(0);

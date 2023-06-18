@@ -4,7 +4,7 @@ import Login from "../components/login.jsx";
 import SignUp from "../components/SignUp.jsx";
 import Home from "../components/Home.jsx";
 import Selection from "../components/Selection.jsx";
-import Gamex from "../components/Gamex.jsx";
+import Online from "../components/Online.jsx";
 import Offline from "../components/Offline.jsx";
 import Info from "../components/Info.jsx";
 import User from "../components/User.jsx";
@@ -49,10 +49,10 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: "gamex",
+    path: "online",
     element: (
       <RequireAuth>
-        <Gamex />
+        <Online />
       </RequireAuth>
     ),
   },
