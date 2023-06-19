@@ -116,11 +116,16 @@ export default function Offline() {
         <Link onClick={() => { setState("hidden"); }} to="/user">
           <button>Indietro</button>
         </Link>
+        <button onClick={Ricomincia}>Ricomincia</button>
         <br />
         {moves}
-      </div>
+      </div >
     </>
   );
+}
+
+function Ricomincia() {
+  location.reload();
 }
 
 function calculateWinner(squares) {
