@@ -8,6 +8,7 @@ import Online from "../components/Online.jsx";
 import Offline from "../components/Offline.jsx";
 import Info from "../components/Info.jsx";
 import User from "../components/User.jsx";
+import Waiting from "../components/waiting.jsx";
 
 function RequireAuth({ children }) {
   const [loggedIn, setLoggedIn] = useState();
@@ -66,7 +67,19 @@ const router = createBrowserRouter([
   },
   {
     path: "offline",
-    element: <Offline />,
+    element: (
+      <RequireAuth>
+        <Offline />
+      </RequireAuth>
+    ),
+  },
+  {
+    path: "waiting",
+    element: (
+      <RequireAuth>
+        <Waiting />
+      </RequireAuth>
+    ),
   },
 ]);
 export default router;
