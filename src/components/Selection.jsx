@@ -5,7 +5,7 @@ function Selection() {
     return (
         <div id="c1">
             <h1 id="c2">The Tris Game</h1>
-            <Link to="/">
+            <Link to="/waiting">
                 <button className="play-button">ONline</button>
             </Link>
             <Link to="/offline">
