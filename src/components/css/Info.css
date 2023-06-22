@@ -1,19 +1,14 @@
-#cont_pagina{
+#cont_pagina {
     background-color: rgb(207, 120, 43);
     width: 100%;
-    height: 100%;
+    height: 100vh;
 }
 
-/*body{
-    background-color: rgb(42, 151, 165);
-}*/
-
-#link{
-    color:white;
+#link {
+    color: white;
 }
 
-#indietro
-{
+#indietro {
     margin-left: 88%;
     margin-top: 2%;
 }
