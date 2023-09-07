@@ -1,40 +1,23 @@
 import './css/Waiting.css'
 import { useEffect, useState } from "react";
 
-async function getSession() {
+async function joinSession() {
     try {
-        const response = await fetch("/api/session/getFree", {
+        const response = await fetch("/api/session/joinSession", {
             method: "GET",
             credentials: "include",
-            headers: {
-                "Content-Type": "application/json"
-            },
         });
-
-        const result = await response.json();
-        return result;
+        console.log("Success:", response);
     }
     catch (error) {
         console.error("Error:", error);
     }
 }
 
-async function createSession() {
-    console.log("createSession");
-    try {
-        const response = await fetch("/api/session/create", {
-            method: "POST",
-            credentials: "include",
-        });
-        const result = await response.json();
-        console.log("Success:", result);
-    } catch (error) {
-        console.error("Error:", error);
-    }
-}
-
 function Waiting() {
-    /*useEffect(() => { createSession() });*/
+    useEffect(() => {
+        joinSession();
+    });
     return (
         <div className="center">
             <h1>Waiting for opponent...</h1>
