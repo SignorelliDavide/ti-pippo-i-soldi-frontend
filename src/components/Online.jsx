@@ -39,7 +39,7 @@ function Board({ xIsNext, squares, onPlay }) {
   const [stato, setState] = useGlobalState("stato");
   const [moves, setMoves] = useState(0);
 
-  function handleClick(i) {
+  async function handleClick(i) {
     if (squares[i]) {
       return;
     }
@@ -76,6 +76,14 @@ function Board({ xIsNext, squares, onPlay }) {
 
     setStatus("Prossimo giocatore: " + (xIsNext ? "O" : "X"));
 
+    const sendMove = await fetch("/api/session/insert", {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ cell: i }),
+    });
   }
 
   return (
