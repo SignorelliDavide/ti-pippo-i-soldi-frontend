@@ -57,6 +57,8 @@ function Board({ squares, onPlay }) {
   const [stato, setState] = useGlobalState("stato");
   const [moves, setMoves] = useState(0);
   const [player, setPlayer] = useState("");
+  const [inter, setInter] = useState(null);
+  const [isGameFinished, setIsGameFinished] = useState(false);
 
   const fetchData = async () => {
     try {
@@ -68,9 +70,9 @@ function Board({ squares, onPlay }) {
       if (response.ok) {
         const data = await response.json();
         setPlayer(data);
-        setInterval(() => {
+        setInter(setInterval(() => {
           update(data);
-        }, 1500);
+        }, 2000));
       } else {
         console.error("Errore nella richiesta HTTP");
       }
@@ -80,54 +82,59 @@ function Board({ squares, onPlay }) {
   };
 
   async function update(player) {
-    const response = await fetch("/api/session/getxIsNext", {
-      method: "GET",
-      credentials: "include",
-    })
-    const xTurn = await response.json();
-
-    try {
-      //console.log("update");
-      const response = await fetch("/api/session/update", {
-        method: "GET",
-        credentials: "include",
-      });
-      const result = await response.json();
-      //console.log("Success:", result);
-      for (let i = 0; i < 9; i++) {
-        const key = `cell${i}`;
-        const value = result[0][key];
-        //console.log(squares[i]);
-        if (value != squares[i]) {
-          squares[i] = value;
-          setMoves(moves + 1);
-          onPlay(squares);
-          if (calculateWinner(squares) || moves == 8) {
-            const winner = calculateWinner(squares);
-            if (winner) {
-              setState("visible");
-              setStatus("Vincitore: " + winner);
-              if (winner == "O") {
-                invioRisultato({ result: "lose" });
-              } else {
-                invioRisultato({ result: "win" });
+    if (!isGameFinished && !calculateWinner(squares))
+      try {
+        const response = await fetch("/api/session/update", {
+          method: "GET",
+          credentials: "include",
+        });
+        const result = await response.json();
+        const xTurn = result[0].xIsNext;
+        //console.log("Success:", result);
+        for (let i = 0; i < 9; i++) {
+          const key = `cell${i}`;
+          const value = result[0][key];
+          //console.log(squares[i]);
+          if (value != squares[i]) {
+            squares[i] = value;
+            setMoves(moves + 1);
+            onPlay(squares);
+            if (calculateWinner(squares) || moves == 8) {
+              const winner = calculateWinner(squares);
+              if (winner) {
+                setStatus("Vincitore: " + winner);
+                if (winner == player) {
+                  invioRisultato({ result: "win" });
+                } else {
+                  invioRisultato({ result: "lose" });
+                }
+              } else if (moves == 8) {
+                invioRisultato({ result: "tie" });
+                setStatus("Pareggio");
               }
-            } else if (moves == 8) {
-              setState("visible");
-              invioRisultato({ result: "tie" });
-              setStatus("Pareggio");
+              setMoves(0);
+              setIsGameFinished(true);
+              clearInterval(inter);
+              console.log("Game finished");
+              await fetch("/api/session/delete", {
+                method: "DELETE",
+                credentials: "include",
+              });
+              await fetch("/api/session/delete", {
+                method: "DELETE",
+                credentials: "include",
+              });
+              return;
             }
-            setMoves(0);
+            setStatus("Prossimo giocatore: " + (xTurn ? "X" : "O"));
           }
-          setStatus("Prossimo giocatore: " + (xTurn ? "X" : "O"));
         }
+
+
+
+      } catch (error) {
+        console.error("Error:", error);
       }
-
-
-
-    } catch (error) {
-      console.error("Error:", error);
-    }
   };
 
 
@@ -154,24 +161,7 @@ function Board({ squares, onPlay }) {
     onPlay(nextSquares);
 
 
-    if (calculateWinner(nextSquares) || moves == 8) {
-      const winner = calculateWinner(nextSquares);
-      if (winner) {
-        setState("visible");
-        setStatus("Vincitore: " + winner);
-        if (winner == "O") {
-          invioRisultato({ result: "lose" });
-        } else {
-          invioRisultato({ result: "win" });
-        }
-      } else if (moves == 8) {
-        setState("visible");
-        invioRisultato({ result: "tie" });
-        setStatus("Pareggio");
-      }
-      setMoves(0);
 
-    }
     setStatus("Prossimo giocatore: " + (!xTurn ? "X" : "O"));
     setxIsNext();
 
@@ -184,6 +174,21 @@ function Board({ squares, onPlay }) {
       },
       body: JSON.stringify({ cell: i }),
     });
+
+    if (calculateWinner(squares) || moves == 8) {
+      const winner = calculateWinner(squares);
+      if (winner) {
+        setStatus("Vincitore: " + winner);
+
+      } else if (moves == 8) {
+        invioRisultato({ result: "tie" });
+        setStatus("Pareggio");
+      }
+      setMoves(0);
+      setIsGameFinished(true);
+      clearInterval(inter);
+      return;
+    }
 
   }
 
@@ -211,7 +216,6 @@ export default function Online() {
   const [stato, setState] = useGlobalState("stato");
   const [currentMove, setCurrentMove] = useState(0);
   const currentSquares = history[currentMove];
-  getxIsNext();
 
   function handlePlay(nextSquares) {
     const nextHistory = [...history.slice(0, currentMove + 1), nextSquares];
