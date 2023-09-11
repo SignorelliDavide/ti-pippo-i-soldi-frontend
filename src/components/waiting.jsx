@@ -8,7 +8,7 @@ async function joinSession() {
             method: "GET",
             credentials: "include",
         });
-        console.log("Success:", response);
+        //console.log("Success:", response);
     }
     catch (error) {
         console.error("Error:", error);
@@ -29,7 +29,7 @@ function Waiting() {
                 credentials: "include",
             });
             const result = await response.json();
-            console.log("Success:", result);
+            //console.log("Success:", result);
             if (result) {
                 navigate("/online");
             }

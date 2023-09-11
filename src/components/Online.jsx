@@ -1,10 +1,26 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { createGlobalState } from "react-hooks-global-state";
 import { Link } from "react-router-dom";
 import './css/Gamex.css';
 
 const initialState = { stato: "hidden" };
 const { useGlobalState } = createGlobalState(initialState);
+
+async function getxIsNext() {
+  const response = await fetch("/api/session/getxIsNext", {
+    method: "GET",
+    credentials: "include",
+  })
+  const result = await response.json();
+  return result;
+}
+
+async function setxIsNext() {
+  const response = await fetch("/api/session/setxIsNext", {
+    method: "POST",
+    credentials: "include",
+  })
+}
 
 function Square({ value, onSquareClick }) {
   return (
@@ -28,31 +44,115 @@ async function invioRisultato(risultato) {
       },
     });
     const result = await response.json();
-    console.log("Success:", result);
+    //console.log("Success:", result);
   } catch (error) {
     console.error("Error:", error);
   }
 }
 
-function Board({ xIsNext, squares, onPlay }) {
-  const [status, setStatus] = useState("Prossimo giocatore: " + (xIsNext ? "X" : "O"));
+
+
+function Board({ squares, onPlay }) {
+  const [status, setStatus] = useState("Prossimo giocatore: " + (getxIsNext ? "X" : "O"));
   const [stato, setState] = useGlobalState("stato");
   const [moves, setMoves] = useState(0);
+  const [player, setPlayer] = useState("");
+
+  const fetchData = async () => {
+    try {
+      const response = await fetch("/api/session/whoIsPlaying", {
+        method: "GET",
+        credentials: "include",
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setPlayer(data);
+        setInterval(() => {
+          update(data);
+        }, 1500);
+      } else {
+        console.error("Errore nella richiesta HTTP");
+      }
+    } catch (error) {
+      console.error("Errore nella richiesta HTTP:", error);
+    }
+  };
+
+  async function update(player) {
+    const response = await fetch("/api/session/getxIsNext", {
+      method: "GET",
+      credentials: "include",
+    })
+    const xTurn = await response.json();
+
+    try {
+      //console.log("update");
+      const response = await fetch("/api/session/update", {
+        method: "GET",
+        credentials: "include",
+      });
+      const result = await response.json();
+      //console.log("Success:", result);
+      for (let i = 0; i < 9; i++) {
+        const key = `cell${i}`;
+        const value = result[0][key];
+        //console.log(squares[i]);
+        if (value != squares[i]) {
+          squares[i] = value;
+          setMoves(moves + 1);
+          onPlay(squares);
+          if (calculateWinner(squares) || moves == 8) {
+            const winner = calculateWinner(squares);
+            if (winner) {
+              setState("visible");
+              setStatus("Vincitore: " + winner);
+              if (winner == "O") {
+                invioRisultato({ result: "lose" });
+              } else {
+                invioRisultato({ result: "win" });
+              }
+            } else if (moves == 8) {
+              setState("visible");
+              invioRisultato({ result: "tie" });
+              setStatus("Pareggio");
+            }
+            setMoves(0);
+          }
+          setStatus("Prossimo giocatore: " + (xTurn ? "X" : "O"));
+        }
+      }
+
+
+
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+
+
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   async function handleClick(i) {
+    const response = await fetch("/api/session/getxIsNext", {
+      method: "GET",
+      credentials: "include",
+    })
+    const xTurn = await response.json();
     if (squares[i]) {
       return;
     }
+    if (player == "X" && xTurn == false || player == "O" && xTurn == true)
+      return;
 
     setMoves(moves + 1);
 
     const nextSquares = squares.slice();
-    if (xIsNext) {
-      nextSquares[i] = "X";
-    } else {
-      nextSquares[i] = "O";
-    }
+    nextSquares[i] = player;
     onPlay(nextSquares);
+
 
     if (calculateWinner(nextSquares) || moves == 8) {
       const winner = calculateWinner(nextSquares);
@@ -71,12 +171,12 @@ function Board({ xIsNext, squares, onPlay }) {
       }
       setMoves(0);
 
-      return;
     }
+    setStatus("Prossimo giocatore: " + (!xTurn ? "X" : "O"));
+    setxIsNext();
 
-    setStatus("Prossimo giocatore: " + (xIsNext ? "O" : "X"));
 
-    const sendMove = await fetch("/api/session/insert", {
+    fetch("/api/session/insert", {
       method: "POST",
       credentials: "include",
       headers: {
@@ -84,10 +184,12 @@ function Board({ xIsNext, squares, onPlay }) {
       },
       body: JSON.stringify({ cell: i }),
     });
+
   }
 
   return (
     <div style={{ textAlign: "center" }}>
+      <h1>Tu sei: {player}</h1>
       <div className="status">{status}</div>
       <div className="board">
         <Square value={squares[0]} onSquareClick={() => handleClick(0)} />
@@ -108,8 +210,8 @@ export default function Online() {
   const [history, setHistory] = useState([Array(9).fill(null)]);
   const [stato, setState] = useGlobalState("stato");
   const [currentMove, setCurrentMove] = useState(0);
-  const xIsNext = currentMove % 2 === 0;
   const currentSquares = history[currentMove];
+  getxIsNext();
 
   function handlePlay(nextSquares) {
     const nextHistory = [...history.slice(0, currentMove + 1), nextSquares];
@@ -142,7 +244,7 @@ export default function Online() {
 
   return (
     <>
-      <Board xIsNext={xIsNext} squares={currentSquares} onPlay={handlePlay} />
+      <Board squares={currentSquares} onPlay={handlePlay} />
       <div style={{ textAlign: "center", width: "auto" }}>
         <Link onClick={() => { setState("hidden"); }} to="/user">
           <button>Indietro</button>

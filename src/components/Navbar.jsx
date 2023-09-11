@@ -15,7 +15,7 @@ function Navbar() {
       });
 
       const result = await response.json();
-      console.log("Success:", result);
+      //console.log("Success:", result);
 
       navigate("/");
     } catch (error) {

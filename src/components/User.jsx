@@ -22,7 +22,7 @@ function User() {
             setWins(result.wins);
             setTie(result.tie);
             setPlayed(result.wins + result.losses + result.tie);
-            console.log("Success:", result);
+            //console.log("Success:", result);
         } catch (error) {
             console.error("Error:", error);
         }
@@ -38,7 +38,7 @@ function User() {
 
             const result = await response.json();
             setTop5(result);
-            console.log("Success:", result);
+            //console.log("Success:", result);
         }
         catch (error) {
             console.error("Error:", error);
@@ -47,7 +47,7 @@ function User() {
 
     useEffect(() => {
         ottieniDati()
-        console.log(top5);
+        //console.log(top5);
     }, []);
 
     return (

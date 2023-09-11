@@ -23,7 +23,7 @@ function Login() {
       });
 
       const result = await response.json();
-      console.log("Success:", result);
+      //console.log("Success:", result);
 
       // Utilizza useNavigate per reindirizzare alla home
       navigate("/user");
